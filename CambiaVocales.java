@@ -55,6 +55,7 @@ public class CambiaVocales {
                 //Se leen las siguientes líneas que haya en el fichero
                 cadena = entrada.readLine();
             }
+             System.out.println("\noo00 Se acabó el programa 00oo\n");
         } catch (FileNotFoundException fnfe) {
             System.out.println(fnfe.getMessage());
         } catch (IOException ioe) {
