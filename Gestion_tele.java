@@ -1,11 +1,38 @@
+import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class  Gestion_tele {
 
-
+    Scanner teclado=new Scanner(System.in);
 
     public void alta(){
+        FileOutputStream fos = null;
+        DataOutputStream dos = null;
+        HashMap <String,String> nue_abo = new HashMap<>();
+        ArrayList<HashMap> lis_abo = new ArrayList<>();
 
+        System.out.println("\n\t\t\033[4mAlta de factura\033[0m\n");
+        System.out.println("Número del abonado:");
+        String num_abo = teclado.nextLine();
+        System.out.println("Nombre");
+        String nom_abo = teclado.nextLine();
+        System.out.println("Valor de la factura");
+        String valo_fac = teclado.nextLine();
+        System.out.println("Datos incorporados al fichero");
+
+        nue_abo.put("num_abonado", num_abo); nue_abo.put("nom_abonado",nom_abo); nue_abo.put("valo_factura", valo_fac);
+        lis_abo.add(nue_abo);
+        try {
+            fos = new FileOutputStream("src/facturas_telf.dat", true);
+            dos = new DataOutputStream(fos);
+            dos.write();
+
+
+        }catch (FileNotFoundException fnfe){
+            System.out.println(fnfe.getMessage());
+        }
     }
     public void modi(){
 
@@ -33,7 +60,8 @@ public class  Gestion_tele {
             System.out.println("4) Consulta del dato de facturación total de la compañía");
             System.out.println("5) Eliminar el fichero");
             System.out.println("6) Salir");
-            opcion = teclado.nextLine();
+            System.out.print("\t\tOpcion: ");
+            opcion = teclado.next();
             switch (opcion){
                 case "1":
                     alta();
