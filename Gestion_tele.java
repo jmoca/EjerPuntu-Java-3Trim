@@ -55,15 +55,18 @@ public class  Gestion_tele {
             File fich = new File ("src/facturas_telf.dat");
             RandomAccessFile fichero = new RandomAccessFile(fich, "rw");
             fichero.seek(0);
-            while (true) {
+            while (fichero.getFilePointer() < fichero.length()) {
                 int num_dat = fichero.readInt();
                 if(num_dat == num_abo){
                     fichero.readUTF();
+                    long pos = fichero.getFilePointer();
                     float valor_fac = fichero.readFloat();
                     System.out.println("Valor de la factura: "+forma_esp.format(valor_fac));
                     System.out.print("Nuevo Valor factura: ");
                     float nue_fac = teclado.nextFloat();
+                    fichero.seek(pos);
                     fichero.writeFloat(nue_fac);
+                    break;
                 }
 
             }
