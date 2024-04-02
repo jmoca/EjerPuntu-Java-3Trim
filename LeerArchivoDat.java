@@ -1,20 +1,25 @@
-import java.io.FileInputStream;
-import java.io.BufferedInputStream;
+import java.io.*;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 public class LeerArchivoDat {
-    public static void main(String[] args) throws java.io.IOException {
-        byte bufferEntrada[] = new byte[50];
-        int numBytesLeidos;
-        FileInputStream fis = new FileInputStream("src/facturas_telf.dat");
-        BufferedInputStream entrada = new BufferedInputStream(fis);
-        while (true) {
-            numBytesLeidos = entrada.read(bufferEntrada);
-            System.out.println("Leidos " + numBytesLeidos + " bytes");
-            if (numBytesLeidos <= 0) break;
-            for (int i = 0; i < 50; i++) {
-                System.out.println("En "+i+" hay " + bufferEntrada[i]);
-                bufferEntrada[i] = 0;
+
+    public static void main(String[] args) {
+       LeerArchivoDat leer = new LeerArchivoDat();
+       leer.todo();
+    }
+    public void todo(){
+        String fichero= "src/facturas_telf.dat";
+        try(DataInputStream dis = new DataInputStream(new FileInputStream(fichero))) {
+            NumberFormat espFormat = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("es-ES"));
+            while (dis.available() > 0){
+                System.out.println("Número de abonado: "+dis.readInt());
+                System.out.println("Nombre del abonado: "+dis.readUTF());
+                System.out.println("Valor de la factura: "+espFormat.format(dis.readFloat()) +"\n");
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+
         }
-        fis.close();
     }
 }

@@ -1,6 +1,8 @@
 import java.io.*;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class  Gestion_tele {
@@ -10,41 +12,77 @@ public class  Gestion_tele {
     public void alta(){
         FileOutputStream fos = null;
         DataOutputStream dos = null;
-        HashMap <String,String> nue_abo = new HashMap<>();
-        ArrayList<HashMap> lis_abo = new ArrayList<>();
 
-        System.out.println("\n\t\t\033[4mAlta de factura\033[0m\n");
+
+        System.out.println("\n033[4mAlta de factura\033[0m\n");
         System.out.println("Número del abonado:");
-        String num_abo = teclado.nextLine();
+        int num_abo = teclado.nextInt();
         System.out.println("Nombre");
         String nom_abo = teclado.nextLine();
         System.out.println("Valor de la factura");
-        String valo_fac = teclado.nextLine();
+        float valo_fac = teclado.nextFloat();
         System.out.println("Datos incorporados al fichero");
 
-        nue_abo.put("num_abonado", num_abo); nue_abo.put("nom_abonado",nom_abo); nue_abo.put("valo_factura", valo_fac);
-        lis_abo.add(nue_abo);
+
         try {
             fos = new FileOutputStream("src/facturas_telf.dat", true);
             dos = new DataOutputStream(fos);
-            dos.write();
-
+            dos.writeInt(num_abo);
+            dos.writeUTF(nom_abo);
+            dos.writeFloat(valo_fac);
 
         }catch (FileNotFoundException fnfe){
             System.out.println(fnfe.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }finally {
+            try {
+                if (fos != null)
+                    fos.close();
+                if (dos != null)
+                    dos.close();
+            } catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
-    public void modi(){
+    public void modi() {
+        NumberFormat forma_esp = NumberFormat.getCurrencyInstance(Locale.forLanguageTag("es-ES"));
+        System.out.println("\n\033[4mModificación del valor de factura\033[0m\n");
+        System.out.print("Número del abonado: ");
+        int num_abo = teclado.nextInt();
+        try {
+            File fich = new File ("src/facturas_telf.dat");
+            RandomAccessFile fichero = new RandomAccessFile(fich, "rw");
+            fichero.seek(0);
+            while (true) {
+                int num_dat = fichero.readInt();
+                if(num_dat == num_abo){
+                    fichero.readUTF();
+                    float valor_fac = fichero.readFloat();
+                    System.out.println("Valor de la factura: "+forma_esp.format(valor_fac));
+                    System.out.print("Nuevo Valor factura: ");
+                    float nue_fac = teclado.nextFloat();
+                    fichero.writeFloat(nue_fac);
+                }
+
+            }
+        } catch (FileNotFoundException fnfe){
+            System.out.println(fnfe.getMessage());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
 
     }
     public void fact_abo(){
-
+        System.out.println("\n\033[4mConsulta facturación abonado\033[0m\n");
     }
     public void fact_total(){
-
+        System.out.println("\n\033[4mConsulta facturación abonado\033[0m\n");
     }
     public void eli(){
-
+        System.out.println("\n\033[4mEliminar fichero\033[0m\n");
     }
 
     public void menu(){
@@ -79,7 +117,7 @@ public class  Gestion_tele {
                     eli();
                     break;
                 case "6":
-                    System.out.println("Saliendo del programa");
+                    System.out.println("Saliendo del programa ...");
                     salir = true;
             }
 
