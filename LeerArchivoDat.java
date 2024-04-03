@@ -17,6 +17,8 @@ public class LeerArchivoDat {
                 System.out.println("Nombre del abonado: "+dis.readUTF());
                 System.out.println("Valor de la factura: "+espFormat.format(dis.readFloat()) +"\n");
             }
+        } catch (FileNotFoundException fn){
+            System.out.println(fn.getMessage());
         } catch (IOException e) {
             throw new RuntimeException(e);
 
