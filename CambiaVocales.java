@@ -25,6 +25,10 @@ public class CambiaVocales {
                 if (frase.length() > 80) {
                     frase = frase.substring(0,80);
                 }
+                //Si pones Fin se termina la escritura en el archivo de texto.
+                if (frase.equalsIgnoreCase("FIN")) {
+                    break;
+                }
                 // Escribir la frase en el archivo
                 salida.println(frase);
 
