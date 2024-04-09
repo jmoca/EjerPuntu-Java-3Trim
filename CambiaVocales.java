@@ -53,8 +53,9 @@ public class CambiaVocales {
             //Mientras no se llegue al final del fichero que siga leyendo
             while (cadena != null) {
                 // Reemplazar vocales por otras vocales en la cadena y mostrarla
-                String frase_Modi = cadena.replace("a", "i");
-                frase_Modi = frase_Modi.replace("e","o");
+
+                String frase_Modi = cadena.replace("a", "i").replace("A","I");
+                frase_Modi = frase_Modi.replace("e","o").replace("E","O");
                 System.out.println(cadena +" -> "+frase_Modi);
                 //Se leen las siguientes líneas que haya en el fichero
                 cadena = entrada.readLine();
