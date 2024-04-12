@@ -1,0 +1,26 @@
+<peliculas>
+    <pelicula>
+        <titulo>Verano 1993</titulo>
+        <guionista>Carla Sim&#243;n</guionista>
+        <productora>Inicia Films</productora>
+        <director>Carla Sim&#243;n</director>
+        <actor>Laia Artigas</actor>
+        <sinopsis>Frida (Laia Artigas), una ni&#241;a de seis a&#241;os, afronta el primer verano de su vida con su nueva familia adoptiva tras la muerte de su madre. Lejos de su entorno cercano, en pleno campo, la ni&#241;a deber&#225; adaptarse a su nueva vida.</sinopsis>
+    </pelicula>
+    <pelicula>
+        <titulo>El jugador de ajedrez</titulo>
+        <guionista>Julio Castedo</guionista>
+        <productora>Ishtar Films</productora>
+        <director>Luis Oliveros</director>
+        <actor> Marc Clotet</actor>
+        <sinopsis>En 1934 Diego Padilla gana el campeonato de Espa&#241;a de ajedrez y conoce a una periodista francesa, Marianne Latour, de la cual se enamora.</sinopsis>
+    </pelicula>
+    <pelicula>
+        <titulo>Colonia</titulo>
+        <guionista>Florian Gallenberger</guionista>
+        <productora>Majestic Filmproduktion</productora>
+        <director>Florian Gallenberger</director>
+        <actor>Emma Watson</actor>
+        <sinopsis>Una joven pareja alemana, la azafata de vuelo Lena (Emma Watson) y el artista Daniel (Daniel Br&#252;hl), se ve envuelta en el golpe de Estado de Chile en 1973 conta Salvador Allende.</sinopsis>
+    </pelicula>
+</peliculas>
