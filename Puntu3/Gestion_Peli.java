@@ -2,8 +2,8 @@ package Puntu3;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -12,6 +12,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Scanner;
 
@@ -64,7 +65,7 @@ public class Gestion_Peli {
             System.out.println("---Documento XML resultante---");
             StreamResult consoleResult = new StreamResult(System.out);
             transformador.transform(source, consoleResult);
-
+            System.out.println();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -72,6 +73,7 @@ public class Gestion_Peli {
     public void nuevo_nodo(){
         menu_nodos("Insertar");
         opcion = teclado.next();
+        teclado.nextLine();
         switch (opcion){
             case "1":
                 try {
@@ -82,30 +84,37 @@ public class Gestion_Peli {
                     Document docDOM = constructDoc.parse(fichXML);
                     //Elimina nodos vacíos y combina adyacentes en caso de que los hubiera
                     docDOM.getDocumentElement().normalize();
-                    Element nuevaPelicula = docDOM.createElement("pelicula");
+                    Element nuevaPelicula = docDOM.createElement("película");
+
                     // Creamos los elementos hijos de la pelicula
+                    System.out.println("Nombre de la película");
                     Element titulo = docDOM.createElement("titulo");
-                    titulo.appendChild(docDOM.createTextNode("Nuevo título de película"));
+                    titulo.appendChild(docDOM.createTextNode(teclado.nextLine()));
                     nuevaPelicula.appendChild(titulo);
 
+                    System.out.println("Nombre del guionista ");
                     Element guionista = docDOM.createElement("guionista");
-                    guionista.appendChild(docDOM.createTextNode("Nuevo guionista"));
+                    guionista.appendChild(docDOM.createTextNode(teclado.nextLine()));
                     nuevaPelicula.appendChild(guionista);
 
+                    System.out.println("Nombre de la productora");
                     Element productora = docDOM.createElement("productora");
-                    productora.appendChild(docDOM.createTextNode("Nueva productora"));
+                    productora.appendChild(docDOM.createTextNode(teclado.nextLine()));
                     nuevaPelicula.appendChild(productora);
 
+                    System.out.println("Nombre del director");
                     Element director = docDOM.createElement("director");
-                    director.appendChild(docDOM.createTextNode("Nuevo director"));
+                    director.appendChild(docDOM.createTextNode(teclado.nextLine()));
                     nuevaPelicula.appendChild(director);
 
+                    System.out.println("Nombre del actor");
                     Element actor = docDOM.createElement("actor");
-                    actor.appendChild(docDOM.createTextNode("Nuevo actor"));
+                    actor.appendChild(docDOM.createTextNode(teclado.nextLine()));
                     nuevaPelicula.appendChild(actor);
 
+                    System.out.println("Nombre de la sinopsis");
                     Element sinopsis = docDOM.createElement("sinopsis");
-                    sinopsis.appendChild(docDOM.createTextNode("Nueva sinopsis"));
+                    sinopsis.appendChild(docDOM.createTextNode(teclado.nextLine()));
                     nuevaPelicula.appendChild(sinopsis);
 
                     // Agregamos el nuevo nodo pelicula al nodo peliculas
@@ -122,20 +131,149 @@ public class Gestion_Peli {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
                 break;
             case "2":
                 System.out.println("Indica la posición dentro del documento:");
-                break;
-            case "3":
+                int posicion = Integer.parseInt(teclado.nextLine()) - 1;
+
+
+                try {
+                    File fichXML = new File("src/Puntu3/peliculas.xml");
+                    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+                    Document doc = docBuilder.parse(fichXML);
+                    doc.getDocumentElement().normalize();
+
+                    NodeList lis_peli = doc.getElementsByTagName("pelicula");
+                    for (int cont = 0; cont < lis_peli.getLength(); cont++) {
+                        Node cada_peli = lis_peli.item(cont);
+                        if (cont == posicion) { // Verificar si es la película que queremos modificar
+                            Element modiPelicula = (Element) cada_peli;
+
+                            System.out.println("Nombre de la película:");
+                            modiPelicula.getElementsByTagName("titulo").item(0).setTextContent(teclado.nextLine());
+
+                            System.out.println("Nombre del guionista:");
+                            modiPelicula.getElementsByTagName("guionista").item(0).setTextContent(teclado.nextLine());
+
+                            System.out.println("Nombre de la productora:");
+                            modiPelicula.getElementsByTagName("productora").item(0).setTextContent(teclado.nextLine());
+
+                            System.out.println("Nombre del director:");
+                            modiPelicula.getElementsByTagName("director").item(0).setTextContent(teclado.nextLine());
+
+                            System.out.println("Nombre del actor:");
+                            modiPelicula.getElementsByTagName("actor").item(0).setTextContent(teclado.nextLine());
+
+                            System.out.println("Nombre de la sinopsis:");
+                            modiPelicula.getElementsByTagName("sinopsis").item(0).setTextContent(teclado.nextLine());
+
+                            // Escribimos los cambios al archivo XML
+                            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                            Transformer transformer = transformerFactory.newTransformer();
+                            DOMSource source = new DOMSource(doc);
+                            StreamResult result = new StreamResult(new FileOutputStream("src/Puntu3/peliculas.xml"));
+                            transformer.transform(source, result);
+
+                            System.out.println("Película modificada correctamente.");
+                            break; // Salir del bucle después de modificar la película
+                        }
+                    }
+                } catch (FileNotFoundException fnfe) {
+                    System.out.println("El archivo no se encontró: " + fnfe.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 break;
+            case "3":
+                try {
+                    File fichXML = new File("src/Puntu3/peliculas.xml");
+                    DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+                    Document doc = docBuilder.parse(fichXML);
+                    doc.getDocumentElement().normalize();
+
+                    Element nuevaPelicula = doc.createElement("pelicula");
+
+                    System.out.println("Nombre de la película:");
+                    Element titulo = doc.createElement("titulo");
+                    titulo.appendChild(doc.createTextNode(teclado.nextLine()));
+                    nuevaPelicula.appendChild(titulo);
+
+                    System.out.println("Nombre del guionista:");
+                    Element guionista = doc.createElement("guionista");
+                    guionista.appendChild(doc.createTextNode(teclado.nextLine()));
+                    nuevaPelicula.appendChild(guionista);
+
+                    System.out.println("Nombre de la productora:");
+                    Element productora = doc.createElement("productora");
+                    productora.appendChild(doc.createTextNode(teclado.nextLine()));
+                    nuevaPelicula.appendChild(productora);
+
+                    System.out.println("Nombre del director:");
+                    Element director = doc.createElement("director");
+                    director.appendChild(doc.createTextNode(teclado.nextLine()));
+                    nuevaPelicula.appendChild(director);
+
+                    System.out.println("Nombre del actor:");
+                    Element actor = doc.createElement("actor");
+                    actor.appendChild(doc.createTextNode(teclado.nextLine()));
+                    nuevaPelicula.appendChild(actor);
+
+                    System.out.println("Nombre de la sinopsis:");
+                    Element sinopsis = doc.createElement("sinopsis");
+                    sinopsis.appendChild(doc.createTextNode(teclado.nextLine()));
+                    nuevaPelicula.appendChild(sinopsis);
+
+                    // Agregamos la nueva película al final del elemento 'peliculas'
+                    doc.getDocumentElement().appendChild(nuevaPelicula);
+
+                    // Escribimos los cambios al archivo XML
+                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                    Transformer transformer = transformerFactory.newTransformer();
+                    DOMSource source = new DOMSource(doc);
+                    StreamResult result = new StreamResult(new FileOutputStream("src/Puntu3/peliculas.xml"));
+                    transformer.transform(source, result);
+
+                    System.out.println("Nueva película agregada correctamente.");
+                } catch (FileNotFoundException fnfe) {
+                    System.out.println("El archivo no se encontró: " + fnfe.getMessage());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                break;
             case "4":
+                System.out.println("Volviendo al menu principal....");
                 break;
     }
+    }
+    public void menu_modi(){
+        System.out.println("1) Titulo \t\t\t 4) Director\n" +
+                "2) Guionista \t\t 5) Actor\n" +
+                "3) Productora \t\t 6) Sinopsis\n" +
+                "7) Volver al menú anterior");
     }
     public void modi_nodo(){
         menu_nodos("Modificar");
+        opcion = teclado.next();
+        teclado.nextLine();
+        switch (opcion){
+            case "1":
+                menu_modi();
+                opcion = teclado.next();
+                teclado.nextLine();
+                break;
+            case "2":
+                System.out.println("Indica el título de la película:");
+                int posicion = Integer.parseInt(teclado.nextLine()) - 1;
+                break;
+            case  "3":
+                break;
+            case "4":
+                System.out.println("Volviendo al menu principal....");
+                break;
+        }
     }
 
     public void eli_nodo(){
