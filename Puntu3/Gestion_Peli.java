@@ -143,7 +143,7 @@ public class Gestion_Peli {
                 try {
                     // Obtener la posición donde insertar el nuevo nodo
                     System.out.println("Indica la posición dentro del documento:");
-                    int posicion = Integer.parseInt(teclado.nextLine());
+                    int posicion = Integer.parseInt(teclado.nextLine()) - 1; // Ajuste aquí
 
                     File fichXML = new File("src/Puntu3/peliculas.xml");
                     // Parsea el fichero y lo convierte de fichero a documento XML recorrible
@@ -185,8 +185,6 @@ public class Gestion_Peli {
                     sinopsis.appendChild(docDOM.createTextNode(teclado.nextLine()));
                     nuevaPelicula.appendChild(sinopsis);
 
-
-
                     // Obtener la lista de nodos de pelicula
                     NodeList listaPeliculas = docDOM.getElementsByTagName("pelicula");
 
@@ -207,7 +205,7 @@ public class Gestion_Peli {
                         StreamResult result = new StreamResult(new FileOutputStream("src/Puntu3/peliculas.xml"));
                         transformer.transform(source, result);
 
-                        System.out.println("Nuevo nodo insertado correctamente en la posición " + posicion);
+                        System.out.println("Nuevo nodo insertado correctamente en la posición " + (posicion + 1)); // Ajuste aquí
                     } else {
                         System.out.println("La posición indicada está fuera de rango.");
                     }
@@ -218,7 +216,6 @@ public class Gestion_Peli {
                     // Manejar cualquier otra excepción
                     e.printStackTrace();
                 }
-
 
                 break;
             case "3":
@@ -293,7 +290,7 @@ public class Gestion_Peli {
         menu_nodos("Modificar");
         opcion = teclado.next();
         teclado.nextLine();
-        switch (opcion){
+        switch (opcion) {
             case "1":
                 try {
                     File fichXML = new File("src/Puntu3/peliculas.xml");
@@ -392,91 +389,96 @@ public class Gestion_Peli {
                     Document docDOM = constructDoc.parse(fichXML);
                     docDOM.getDocumentElement().normalize();
 
-                    System.out.println("Indica la posición del nodo que deseas modificar:");
-                    int posicion = Integer.parseInt(teclado.nextLine());
+                    System.out.println("Indica el título de la película:");
+                    String titulo = teclado.nextLine();
 
-                    NodeList listaPeliculas = docDOM.getElementsByTagName("pelicula");
-                    if (posicion < 1 || posicion > listaPeliculas.getLength()) {
-                        System.out.println("La posición especificada está fuera del rango.");
-                        return;
+                    NodeList peliculas = docDOM.getElementsByTagName("pelicula");
+                    for (int i = 0; i < peliculas.getLength(); i++) {
+                        Node pelicula = peliculas.item(i);
+                        if (pelicula.getNodeType() == Node.ELEMENT_NODE) {
+                            Element elementoPelicula = (Element) pelicula;
+                            String tituloPelicula = elementoPelicula.getElementsByTagName("titulo").item(0).getTextContent();
+                            if (tituloPelicula.equals(titulo)) {
+                                menu_modi();
+                                int opcion = Integer.parseInt(teclado.next());
+                                teclado.nextLine();
+
+                                // Modificar el dato seleccionado del nodo pelicula
+                                switch (opcion) {
+                                    case 1:
+                                        System.out.println("Ingrese el nuevo título de la película:");
+                                        String nuevoTitulo = teclado.nextLine();
+                                        // Actualizar el título de la película
+                                        NodeList tituloList = elementoPelicula.getElementsByTagName("titulo");
+                                        Node tituloNode = tituloList.item(0);
+                                        tituloNode.setTextContent(nuevoTitulo);
+                                        break;
+                                    case 2:
+                                        System.out.println("Ingrese el nuevo guionista de la película:");
+                                        String nuevoGuionista = teclado.nextLine();
+                                        // Actualizar el guionista de la película
+                                        NodeList guionistaList = elementoPelicula.getElementsByTagName("guionista");
+                                        Node guionistaNode = guionistaList.item(0);
+                                        guionistaNode.setTextContent(nuevoGuionista);
+                                        break;
+                                    case 3:
+                                        System.out.println("Ingrese la nueva productora de la película:");
+                                        String nuevaProductora = teclado.nextLine();
+                                        // Actualizar la productora de la película
+                                        NodeList productoraList = elementoPelicula.getElementsByTagName("productora");
+                                        Node productoraNode = productoraList.item(0);
+                                        productoraNode.setTextContent(nuevaProductora);
+                                        break;
+                                    case 4:
+                                        System.out.println("Ingrese el nuevo director de la película:");
+                                        String nuevoDirector = teclado.nextLine();
+                                        // Actualizar el director de la película
+                                        NodeList directorList = elementoPelicula.getElementsByTagName("director");
+                                        Node directorNode = directorList.item(0);
+                                        directorNode.setTextContent(nuevoDirector);
+                                        break;
+                                    case 5:
+                                        System.out.println("Ingrese el nuevo actor de la película:");
+                                        String nuevoActor = teclado.nextLine();
+                                        // Actualizar el actor de la película
+                                        NodeList actorList = elementoPelicula.getElementsByTagName("actor");
+                                        Node actorNode = actorList.item(0);
+                                        actorNode.setTextContent(nuevoActor);
+                                        break;
+                                    case 6:
+                                        System.out.println("Ingrese la nueva sinopsis de la película:");
+                                        String nuevaSinopsis = teclado.nextLine();
+                                        // Actualizar la sinopsis de la película
+                                        NodeList sinopsisList = elementoPelicula.getElementsByTagName("sinopsis");
+                                        Node sinopsisNode = sinopsisList.item(0);
+                                        sinopsisNode.setTextContent(nuevaSinopsis);
+                                        break;
+                                    case 7:
+                                        System.out.println("Volviendo al menú principal...");
+                                        break;
+                                    default:
+                                        System.out.println("Opción no válida.");
+                                        break;
+                                }
+
+                                // Escribir los cambios al archivo XML
+                                TransformerFactory transformerFactory = TransformerFactory.newInstance();
+                                Transformer transformer = transformerFactory.newTransformer();
+                                DOMSource source = new DOMSource(docDOM);
+                                StreamResult result = new StreamResult(new FileOutputStream("src/Puntu3/peliculas.xml"));
+                                transformer.transform(source, result);
+
+                                System.out.println("Nodo modificado correctamente.");
+                                break; // Salir del bucle después de encontrar y modificar el nodo
+                            }
+                        }
                     }
-
-                    Node nodoPelicula = listaPeliculas.item(posicion - 1);
-
-                    // Mostrar menú de opciones para modificar los datos del nodo
-                    menu_modi();
-                    int opcion = Integer.parseInt(teclado.next());
-                    teclado.nextLine();
-
-                    // Modificar el dato seleccionado del nodo pelicula
-                    switch (opcion) {
-                        case 1:
-                            System.out.println("Ingrese el nuevo título de la película:");
-                            String nuevoTitulo = teclado.nextLine();
-                            // Actualizar el título de la película
-                            NodeList tituloList = ((Element) nodoPelicula).getElementsByTagName("titulo");
-                            Node tituloNode = tituloList.item(0);
-                            tituloNode.setTextContent(nuevoTitulo);
-                            break;
-                        case 2:
-                            System.out.println("Ingrese el nuevo guionista de la película:");
-                            String nuevoGuionista = teclado.nextLine();
-                            // Actualizar el guionista de la película
-                            NodeList guionistaList = ((Element) nodoPelicula).getElementsByTagName("guionista");
-                            Node guionistaNode = guionistaList.item(0);
-                            guionistaNode.setTextContent(nuevoGuionista);
-                            break;
-                        case 3:
-                            System.out.println("Ingrese la nueva productora de la película:");
-                            String nuevaProductora = teclado.nextLine();
-                            // Actualizar la productora de la película
-                            NodeList productoraList = ((Element) nodoPelicula).getElementsByTagName("productora");
-                            Node productoraNode = productoraList.item(0);
-                            productoraNode.setTextContent(nuevaProductora);
-                            break;
-                        case 4:
-                            System.out.println("Ingrese el nuevo director de la película:");
-                            String nuevoDirector = teclado.nextLine();
-                            // Actualizar el director de la película
-                            NodeList directorList = ((Element) nodoPelicula).getElementsByTagName("director");
-                            Node directorNode = directorList.item(0);
-                            directorNode.setTextContent(nuevoDirector);
-                            break;
-                        case 5:
-                            System.out.println("Ingrese el nuevo actor de la película:");
-                            String nuevoActor = teclado.nextLine();
-                            // Actualizar el actor de la película
-                            NodeList actorList = ((Element) nodoPelicula).getElementsByTagName("actor");
-                            Node actorNode = actorList.item(0);
-                            actorNode.setTextContent(nuevoActor);
-                            break;
-                        case 6:
-                            System.out.println("Ingrese la nueva sinopsis de la película:");
-                            String nuevaSinopsis = teclado.nextLine();
-                            // Actualizar la sinopsis de la película
-                            NodeList sinopsisList = ((Element) nodoPelicula).getElementsByTagName("sinopsis");
-                            Node sinopsisNode = sinopsisList.item(0);
-                            sinopsisNode.setTextContent(nuevaSinopsis);
-                            break;
-                        case 7:
-                            System.out.println("Volviendo al menú principal...");
-                            break;
-                        default:
-                            System.out.println("Opción no válida.");
-                            break;
-                    }
-
-                    // Escribir los cambios al archivo XML
-                    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-                    Transformer transformer = transformerFactory.newTransformer();
-                    DOMSource source = new DOMSource(docDOM);
-                    StreamResult result = new StreamResult(new FileOutputStream("src/Puntu3/peliculas.xml"));
-                    transformer.transform(source, result);
-
-                    System.out.println("Nodo modificado correctamente.");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
+
                 break;
             case  "3":
                 try {
@@ -495,7 +497,7 @@ public class Gestion_Peli {
                     int opcion = Integer.parseInt(teclado.next());
                     teclado.nextLine();
 
-                    // Modificar el dato seleccionado del nodo pelicula
+                    
                     // Modificar el dato seleccionado del nodo pelicula
                     switch (opcion) {
                         case 1:
@@ -583,12 +585,7 @@ public class Gestion_Peli {
 
             Scanner teclado = new Scanner(System.in);
 
-            // Mostrar menú de opciones para seleccionar la posición de eliminación
-            System.out.println("1) Eliminar nodo al principio del documento");
-            System.out.println("2) Eliminar nodo en posiciones intermedias del documento");
-            System.out.println("3) Eliminar nodo al final del documento");
-            System.out.println("4) Volver al menú principal");
-            System.out.print("Opción: ");
+            menu_nodos("Eliminado");
             int opcion = Integer.parseInt(teclado.nextLine());
 
             NodeList listaPeliculas;
@@ -599,6 +596,7 @@ public class Gestion_Peli {
                     listaPeliculas = docDOM.getElementsByTagName("pelicula");
                     Node nodoPelicula = listaPeliculas.item(0);
                     nodoPelicula.getParentNode().removeChild(nodoPelicula);
+                    System.out.println("Nodo eliminado correctamente.");
                     break;
                 case 2:
                     // Eliminar nodo en posiciones intermedias del documento
@@ -623,6 +621,7 @@ public class Gestion_Peli {
                     listaPeliculas = docDOM.getElementsByTagName("pelicula");
                     Node nodoPeliculaFin = listaPeliculas.item(listaPeliculas.getLength() - 1);
                     nodoPeliculaFin.getParentNode().removeChild(nodoPeliculaFin);
+                    System.out.println("Nodo eliminado correctamente.");
                     break;
                 case 4:
                     // Volver al menú principal
