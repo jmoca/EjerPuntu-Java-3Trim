@@ -42,14 +42,23 @@ public class Gestion_BD {
         JPanel notas = new JPanel();
         JPanel botones = new JPanel();
         JPanel mensaje = new JPanel();
-
+        JPanel panelSuperior = new JPanel();
+        JPanel panelCentral = new JPanel();
+        JPanel panelInferior = new JPanel();
         // Estilos
         Font estilo = new Font("Arial", Font.BOLD, 20);
         titu.setFont(estilo);
 
         // Gestión del espaciado(Distribución de la interfaz)
-        marco.setLayout(new BoxLayout(marco.getContentPane(), BoxLayout.Y_AXIS));
-
+        marco.add(pane_titu, BorderLayout.NORTH);
+        marco.add(pane_matri, BorderLayout.CENTER);
+        marco.add(pane_asig, BorderLayout.CENTER);
+        marco.add(notas, BorderLayout.CENTER);
+        marco.add(mensaje, BorderLayout.SOUTH);
+        pane_matri.setLayout(new GridLayout(1,1,5,5));
+        pane_asig.setLayout(new GridLayout(1,1,5,5));
+        notas.setLayout(new GridLayout(1,4,5,5));
+        panelCentral.setLayout(new GridLayout(3, 1));
         // Añadir los elementos a los paneles
         pane_titu.add(titu);
         pane_matri.add(cod_matri);
@@ -131,10 +140,20 @@ public class Gestion_BD {
                 float not1 = Float.parseFloat(nota1Text);
                 float not2 = Float.parseFloat(nota2Text);
                 conexBD.insertar(txtcod, txtnom, not1, not2);
+
+                // Eliminar el anterior JLabel del panel mensaje
+                mensaje.removeAll();
+
+                // Agregar el nuevo JLabel al panel mensaje
                 mensaje.add(mensa_inser);
                 mensaje.setVisible(true);
+
+                // Revalidar y repintar el panel mensaje para actualizar los cambios
+                mensaje.revalidate();
+                mensaje.repaint();
             }
         });
+
         // Acción del botón Modificar
         modi.addActionListener((ActionEvent e) -> {
             // Obtener los valores de los campos de texto
@@ -146,8 +165,16 @@ public class Gestion_BD {
                 float not1 = Float.parseFloat(nota1Text);
                 float not2 = Float.parseFloat(nota2Text);
                 conexBD.modificar(txtcod, txtnom, not1, not2);
+                // Eliminar el anterior JLabel del panel mensaje
+                mensaje.removeAll();
+
+                // Agregar el nuevo JLabel al panel mensaje
                 mensaje.add(mensa_modi);
                 mensaje.setVisible(true);
+
+                // Revalidar y repintar el panel mensaje para actualizar los cambios
+                mensaje.revalidate();
+                mensaje.repaint();
             }
         });
 
@@ -160,8 +187,16 @@ public class Gestion_BD {
             String nota2Text = txt_nota2.getText();
             if (comprueba_campos(txtcod, txtnom, nota1Text, nota2Text)) {
                 conexBD.eli(txtcod);
+                // Eliminar el anterior JLabel del panel mensaje
+                mensaje.removeAll();
+
+                // Agregar el nuevo JLabel al panel mensaje
                 mensaje.add(mensa_eli);
                 mensaje.setVisible(true);
+
+                // Revalidar y repintar el panel mensaje para actualizar los cambios
+                mensaje.revalidate();
+                mensaje.repaint();
             }
         });
         // Acción del botón Consultar
@@ -173,8 +208,16 @@ public class Gestion_BD {
             txt_asig.setText(info[1]);
             txt_nota1.setText(info[2]);
             txt_nota2.setText(info[3]);
+            // Eliminar el anterior JLabel del panel mensaje
+            mensaje.removeAll();
+
+            // Agregar el nuevo JLabel al panel mensaje
             mensaje.add(mensa_encon);
             mensaje.setVisible(true);
+
+            // Revalidar y repintar el panel mensaje para actualizar los cambios
+            mensaje.revalidate();
+            mensaje.repaint();
         });
     }
 

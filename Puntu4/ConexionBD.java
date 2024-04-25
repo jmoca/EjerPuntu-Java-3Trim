@@ -5,7 +5,7 @@ import java.sql.*;
 public class ConexionBD {
     // Variables para la configuración de la conexión
     private static final String ADD_DRIVER = "org.mariadb.jdbc.Driver";
-    private static final String URL_CONEXION = "jdbc:mariadb://localhost:3306/puntu4";
+    private static final String URL_CONEXION = "jdbc:mariadb://localhost:3307/puntu4";
 
     // Declaración de objetos para la conexión y consulta
     PreparedStatement encapsulaCons = null;
