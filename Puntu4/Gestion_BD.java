@@ -11,7 +11,7 @@ public class Gestion_BD {
         // Creación de la ventana principal
         JFrame marco = new JFrame("Ejercicio PEP3T_4_JJ");
         marco.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        marco.setSize(400, 400);
+        marco.setSize(400, 300);
 
         // Instanciacion de un objeto para la conexion a la BD
         ConexionBD conexBD = new ConexionBD();
@@ -42,23 +42,24 @@ public class Gestion_BD {
         JPanel notas = new JPanel();
         JPanel botones = new JPanel();
         JPanel mensaje = new JPanel();
-        JPanel panelSuperior = new JPanel();
-        JPanel panelCentral = new JPanel();
-        JPanel panelInferior = new JPanel();
+
+        JPanel panelGeneral = new JPanel();
+
         // Estilos
         Font estilo = new Font("Arial", Font.BOLD, 20);
         titu.setFont(estilo);
 
         // Gestión del espaciado(Distribución de la interfaz)
-        marco.add(pane_titu, BorderLayout.NORTH);
-        marco.add(pane_matri, BorderLayout.CENTER);
-        marco.add(pane_asig, BorderLayout.CENTER);
-        marco.add(notas, BorderLayout.CENTER);
-        marco.add(mensaje, BorderLayout.SOUTH);
-        pane_matri.setLayout(new GridLayout(1,1,5,5));
-        pane_asig.setLayout(new GridLayout(1,1,5,5));
-        notas.setLayout(new GridLayout(1,4,5,5));
-        panelCentral.setLayout(new GridLayout(3, 1));
+        marco.setLayout(new FlowLayout());
+        pane_matri.setLayout(new FlowLayout(FlowLayout.LEFT));
+        pane_asig.setLayout(new FlowLayout(FlowLayout.LEFT));
+        notas.setLayout(new FlowLayout(FlowLayout.LEFT));
+        panelGeneral.setLayout(new BoxLayout(panelGeneral,BoxLayout.Y_AXIS));
+        pane_titu.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
+        pane_matri.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        pane_asig.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        notas.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
+        botones.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 0));
         // Añadir los elementos a los paneles
         pane_titu.add(titu);
         pane_matri.add(cod_matri);
@@ -75,13 +76,15 @@ public class Gestion_BD {
         botones.add(consu);
 
         // Agregar paneles a la ventana
-        marco.add(pane_titu);
-        marco.add(pane_matri);
-        marco.add(pane_asig);
-        marco.add(notas);
-        marco.add(botones);
-        marco.add(mensaje);
+        panelGeneral.add(pane_titu);
+        panelGeneral.add(pane_matri);
+        panelGeneral.add(pane_asig);
+        panelGeneral.add(notas);
+        panelGeneral.add(botones);
+        panelGeneral.add(mensaje);
+        marco.add(panelGeneral);
         mensaje.setVisible(false);
+        marco.setResizable(false);
         marco.setVisible(true);
 
         // Listener para el campo de texto txt_cod
