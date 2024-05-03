@@ -34,7 +34,9 @@ public class Gestion_BD {
         JLabel mensa_modi = new JLabel("Registro modificado");
         JLabel mensa_eli = new JLabel("Registro eliminado");
         JLabel mensa_encon = new JLabel("Registro encontrado");
-
+        JLabel mensa_errormodi = new JLabel("Error al modificar, no se ha encontrado la asignatura");
+        JLabel mensa_errorborra = new JLabel("Error al borrar, no se ha encontrado la asignatura");
+        JLabel mensa_errorconsu = new JLabel("Error al consultar, no se ha encontrado la asignatura");
         // Paneles para organizar la interfaz
         JPanel pane_titu = new JPanel();
         JPanel pane_matri = new JPanel();
@@ -164,42 +166,75 @@ public class Gestion_BD {
             String txtnom = txt_asig.getText();
             String nota1Text = txt_nota1.getText();
             String nota2Text = txt_nota2.getText();
+            String[] info = conexBD.consu(txtcod);
             if (comprueba_campos(txtcod, txtnom, nota1Text, nota2Text)) {
-                float not1 = Float.parseFloat(nota1Text);
-                float not2 = Float.parseFloat(nota2Text);
-                conexBD.modificar(txtcod, txtnom, not1, not2);
-                // Eliminar el anterior JLabel del panel mensaje
-                mensaje.removeAll();
+                // Verificar si info no es null y si info[0] no es null
+                if (info != null && info[0] != null) {
+                    // Asigna los valores del array a los campos de texto
+                    float not1 = Float.parseFloat(nota1Text);
+                    float not2 = Float.parseFloat(nota2Text);
+                    conexBD.modificar(txtcod, txtnom, not1, not2);
+                    // Eliminar el anterior JLabel del panel mensaje
+                    mensaje.removeAll();
 
-                // Agregar el nuevo JLabel al panel mensaje
-                mensaje.add(mensa_modi);
-                mensaje.setVisible(true);
+                    // Agregar el nuevo JLabel al panel mensaje
+                    mensaje.add(mensa_modi);
+                    mensaje.setVisible(true);
 
-                // Revalidar y repintar el panel mensaje para actualizar los cambios
-                mensaje.revalidate();
-                mensaje.repaint();
+                    // Revalidar y repintar el panel mensaje para actualizar los cambios
+                    mensaje.revalidate();
+                    mensaje.repaint();
+                }else {
+                    // Manejar el caso en el que no se encuentre información en la base de datos
+                    mensaje.removeAll();
+                    mensaje.add(mensa_errormodi);
+                    mensaje.setVisible(true);
+                    mensaje.revalidate();
+                    mensaje.repaint();
+                }
+
             }
         });
 
         // Acción del botón Borrar
         borra.addActionListener((ActionEvent e) -> {
+
             // Obtener los valores de los campos de texto
             String txtcod = txt_cod.getText();
             String txtnom = txt_asig.getText();
             String nota1Text = txt_nota1.getText();
             String nota2Text = txt_nota2.getText();
+
+            String[] info = conexBD.consu(txtcod);
             if (comprueba_campos(txtcod, txtnom, nota1Text, nota2Text)) {
-                conexBD.eli(txtcod);
-                // Eliminar el anterior JLabel del panel mensaje
-                mensaje.removeAll();
+                // Verificar si info no es null y si info[0] no es null
+                if (info != null && info[0] != null) {
+                    // Asigna los valores del array a los campos de texto
+                    txt_asig.setText(info[1]);
+                    txt_nota1.setText(info[2]);
+                    txt_nota2.setText(info[3]);
 
-                // Agregar el nuevo JLabel al panel mensaje
-                mensaje.add(mensa_eli);
-                mensaje.setVisible(true);
+                    if (info[0].matches(txtcod)) {
+                        conexBD.eli(txtcod);
+                        // Eliminar el anterior JLabel del panel mensaje
+                        mensaje.removeAll();
 
-                // Revalidar y repintar el panel mensaje para actualizar los cambios
-                mensaje.revalidate();
-                mensaje.repaint();
+                        // Agregar el nuevo JLabel al panel mensaje
+                        mensaje.add(mensa_eli);
+                        mensaje.setVisible(true);
+
+                        // Revalidar y repintar el panel mensaje para actualizar los cambios
+                        mensaje.revalidate();
+                        mensaje.repaint();
+                    }
+                } else {
+                    // Manejar el caso en el que no se encuentre información en la base de datos
+                    mensaje.removeAll();
+                    mensaje.add(mensa_errorborra);
+                    mensaje.setVisible(true);
+                    mensaje.revalidate();
+                    mensaje.repaint();
+                }
             }
         });
         // Acción del botón Consultar
@@ -207,21 +242,36 @@ public class Gestion_BD {
             // Obtener el valor del campo de texto de código
             String txtcod = txt_cod.getText();
             String[] info = conexBD.consu(txtcod);
-            // Asigna los valores del array a los campos de texto
-            txt_asig.setText(info[1]);
-            txt_nota1.setText(info[2]);
-            txt_nota2.setText(info[3]);
-            // Eliminar el anterior JLabel del panel mensaje
-            mensaje.removeAll();
 
-            // Agregar el nuevo JLabel al panel mensaje
-            mensaje.add(mensa_encon);
-            mensaje.setVisible(true);
+            // Verificar si info no es null y si info[0] no es null
+            if (info != null && info[0] != null) {
+                // Asigna los valores del array a los campos de texto
+                txt_asig.setText(info[1]);
+                txt_nota1.setText(info[2]);
+                txt_nota2.setText(info[3]);
 
-            // Revalidar y repintar el panel mensaje para actualizar los cambios
-            mensaje.revalidate();
-            mensaje.repaint();
+                if (info[0].matches(txtcod)) {
+                    // Eliminar el anterior JLabel del panel mensaje
+                    mensaje.removeAll();
+
+                    // Agregar el nuevo JLabel al panel mensaje
+                    mensaje.add(mensa_encon);
+                    mensaje.setVisible(true);
+
+                    // Revalidar y repintar el panel mensaje para actualizar los cambios
+                    mensaje.revalidate();
+                    mensaje.repaint();
+                }
+            } else {
+                // Manejar el caso en el que no se encuentre información en la base de datos
+                mensaje.removeAll();
+                mensaje.add(mensa_errorconsu);
+                mensaje.setVisible(true);
+                mensaje.revalidate();
+                mensaje.repaint();
+            }
         });
+
     }
 
     // Método para validar los campos y las notas ingresadas

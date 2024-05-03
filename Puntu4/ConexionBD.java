@@ -51,6 +51,9 @@ public class ConexionBD {
         } catch (SQLException e) {
             // Lanzar una excepción de tiempo de ejecución para otros errores SQL
             throw new RuntimeException(e);
+        }finally {
+            // Cerrar la conexión
+            cerrarConexion();
         }
     }
 
@@ -69,6 +72,9 @@ public class ConexionBD {
         } catch (SQLException e) {
             // Lanzar una excepción de tiempo de ejecución para errores SQL
             throw new RuntimeException(e);
+        }finally {
+            // Cerrar la conexión
+            cerrarConexion();
         }
     }
 
@@ -83,6 +89,9 @@ public class ConexionBD {
         } catch (SQLException e) {
             // Lanzar una excepción de tiempo de ejecución para errores SQL
             throw new RuntimeException(e);
+        }finally {
+            // Cerrar la conexión
+            cerrarConexion();
         }
     }
 
@@ -104,6 +113,22 @@ public class ConexionBD {
                 informacion[3] = resulCons.getString("nota2");
             }
             return informacion;
+        } catch (SQLException e) {
+            // Lanzar una excepción de tiempo de ejecución para errores SQL
+            throw new RuntimeException(e);
+        }finally {
+            // Cerrar la conexión
+            cerrarConexion();
+        }
+    }
+    private void cerrarConexion() {
+        try {
+            if (encapsulaCons != null) {
+                encapsulaCons.close();
+            }
+            if (conexBd != null) {
+                conexBd.close();
+            }
         } catch (SQLException e) {
             // Lanzar una excepción de tiempo de ejecución para errores SQL
             throw new RuntimeException(e);
