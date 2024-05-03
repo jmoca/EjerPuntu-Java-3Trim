@@ -48,7 +48,7 @@ public class Gestion_BD {
         JPanel panelGeneral = new JPanel();
 
         // Estilos
-        Font estilo = new Font("Arial", Font.BOLD, 20);
+        Font estilo = new Font("Arial", Font.BOLD, 16);
         titu.setFont(estilo);
 
         // Gestión del espaciado(Distribución de la interfaz)
